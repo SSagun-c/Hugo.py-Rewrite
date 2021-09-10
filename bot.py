@@ -1,7 +1,7 @@
-import discord
 import os
 import discordmongo
 import topgg
+import motor.motor_asyncio
 from discord.ext import commands, tasks
 from discord import Intents
 
@@ -45,3 +45,18 @@ async def update_stats():
     except Exception as e:
         print(f"Failed! See Traceback\n\n{e.__class__.__name__}: {e}\n\n")
 
+ext = ['cogs.configuration.config', 'cogs.anime']
+
+if __name__ == '__main__':
+    """
+    The next three lines connect to the MongoDB Database
+    """
+    client.mongo = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_DATA"))
+    client.db = client.mongo["discord"]
+    client.prefixes = discordmongo.Mongo(connection_url=client.db, dbname="prefixes")
+
+    for x in ext:
+        client.load_extension(x)
+
+update_stats.start()
+client.run(BotToken)
