@@ -54,7 +54,7 @@ if __name__ == '__main__':
     client.mongo = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_DATA"))
     client.db = client.mongo["discord"]
     client.prefixes = discordmongo.Mongo(connection_url=client.db, dbname="prefixes")
-
+    # Loads the extensions aka cogs
     for x in ext:
         client.load_extension(x)
 
